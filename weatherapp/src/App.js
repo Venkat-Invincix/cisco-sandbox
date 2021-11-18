@@ -16,6 +16,7 @@ function SearchForm({ onSubmit }) {
 
   return (
     <Form onSubmit={handleSubmit}>
+      {/* handleSubmit gets called when hit the submit button */}
       <Form.Group>
         <Form.Label>
           <b> Search Weather</b>
@@ -23,12 +24,15 @@ function SearchForm({ onSubmit }) {
         <Form.Control
           type="text"
           className="input"
+          // in react we use className not class for css
           value={value}
+          // value is a state it holds the value of input
           onChange={(e) => setValue(e.target.value)}
+          // onchange of the input field a callback called and setValue set the new value
           placeholder="Search by city"
         />
       </Form.Group>
-
+      {/* Button is a component imported from react-bootstrap */}
       <Button variant="primary mt-3 mb-3" type="submit">
         Search
       </Button>
@@ -48,20 +52,25 @@ function App() {
         `https://api.openweathermap.org/data/2.5/weather?q=${cityName}&appid=df7edfb9dd04675cc1c7d9a38830b9a4`
       )
         .then((res) => {
+          // the api gives the json data in promise
           return res.json();
         })
         .then((data) => {
           setWeatherDetails(data);
+          // after geting the data set the data to the state using setWeatherDetails() updater function 
         })
         .catch((err) => {
           console.log(err);
+          // if error is there then just console log the error . so we can get the error in console
         });
     }
   }, [cityName]);
+  // [cityName] is a dependency array , if the cityName state changes then the useEffect() gets called 
 
-  const onSubmit =(city)=>{
-
-    if(city){
+  // when the form submited onSubmit() function gets called
+  const onSubmit = (city) => {
+    // if city is there then set the city using setcityName() updater function
+    if (city) {
       setcityName(city)
     }
   }
@@ -70,18 +79,24 @@ function App() {
     <div className="App">
       <div className="container">
         <h1 className="text-center mb-5">Weather App</h1>
-        <SearchForm onSubmit={onSubmit}/>
+        {/* we just use the  SearchForm component and pass the callback as a props so we can use that callback in children component*/}
+        <SearchForm onSubmit={onSubmit} />
         <div>
+          {/* Card is a react-boostarap component */}
           <Card>
-            {//if wetherDeatils is present show the card}
+            {/* if wetherDeatils is present show the card */}
             {weatherDeatils && (
               <Card.Body>
                 <div className="weather">
                   <b>{weatherDeatils.name}</b>
+                  {/* from  weatherDeatils object we get the name using weatherDeatils.name*/}
                   <div>
-                    <p>{'Temp: '+weatherDeatils.main.temp+ ' F'}</p>
-                    <p>{'Weather: '+weatherDeatils.weather[0].main}</p>
-
+                    <p>{'Temp: ' + weatherDeatils.main.temp + ' F'}</p>
+                    {/* from  weatherDeatils object has a propert main and inside the property temp is a property 
+                     we can access using weatherDeatils.main.temp*/}
+                    <p>{'Weather: ' + weatherDeatils.weather[0].main}</p>
+                    {/* from weatherDeatils object has a property weather and weather is an array and inside array main is a property 
+                    so we can access that using  weatherDeatils.weather[0].main */}
                   </div>
                 </div>
               </Card.Body>
@@ -94,3 +109,4 @@ function App() {
 }
 
 export default App;
+// export is used so we can access the component in different component
